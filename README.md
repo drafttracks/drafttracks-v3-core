@@ -1,66 +1,105 @@
-# Uniswap V3
+# DraftTracks v3 Core
 
-[![Lint](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/lint.yml/badge.svg)](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/lint.yml)
-[![Tests](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/tests.yml/badge.svg)](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/tests.yml)
-[![Fuzz Testing](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/fuzz-testing.yml/badge.svg)](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/fuzz-testing.yml)
-[![Mythx](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/mythx.yml/badge.svg)](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/mythx.yml)
-[![npm version](https://img.shields.io/npm/v/@uniswap/v3-core/latest.svg)](https://www.npmjs.com/package/@uniswap/v3-core/v/latest)
+> 🧱 Core smart contracts for the [DraftTracks](https://drafttracks.com) Decentralized Artist Exchange (DEX), adapted from Uniswap v3. Enables on-chain trading, liquidity provisioning, and governance of artist tokens powered by $TRACK.
 
-This repository contains the core smart contracts for the Uniswap V3 Protocol.
-For higher level contracts, see the [uniswap-v3-periphery](https://github.com/Uniswap/uniswap-v3-periphery)
-repository.
+---
 
-## Bug bounty
+## 🔍 Overview
 
-This repository is subject to the Uniswap V3 bug bounty program, per the terms defined [here](./bug-bounty.md).
+This repository contains the core contracts that power the **DraftTracks DEX**, a protocol where fans can trade, stake, and govern the rise of human and AI artists through artist tokens and $TRACK.
 
-## Local deployment
+Built on top of [Uniswap v3-core](https://github.com/Uniswap/v3-core), this fork provides the decentralized liquidity and swap infrastructure needed for:
 
-In order to deploy this code to a local testnet, you should install the npm package
-`@uniswap/v3-core`
-and import the factory bytecode located at
-`@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json`.
-For example:
+- Trading $TRACK and artist tokens
+- Creating liquidity pools with configurable fees
+- NFT-based LP positions and incentives
+- Future integration with on-chain battle logic and AI producers
 
-```typescript
-import {
-  abi as FACTORY_ABI,
-  bytecode as FACTORY_BYTECODE,
-} from '@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json'
+---
 
-// deploy the bytecode
+## 🧱 Core Components
+
+| Contract                  | Description |
+|---------------------------|-------------|
+| `UniswapV3Factory.sol`    | Deploys pools and tracks authorized fee tiers |
+| `UniswapV3Pool.sol`       | Handles swaps, liquidity, and tick management |
+| `UniswapV3PoolDeployer.sol` | Orchestrates pool initialization |
+| `Tick.sol`                | Tracks per-price-level liquidity |
+| `Observation.sol`         | Stores time-weighted average price data for oracles |
+| `DraftTracksHooks.sol` *(planned)* | Optional logic for artist battles, staking boosts, and fan rewards |
+
+---
+
+## 🔗 Related Repositories
+
+- [`drafttracks-v3-periphery`](https://github.com/DraftTracks/drafttracks-v3-periphery) — Swap routing, LP NFTs, and external interface contracts
+- [`drafttracks-token`](https://github.com/DraftTracks/track-token) — The official $TRACK ERC-20 token
+- [`drafttracks-artist-factory`](https://github.com/DraftTracks/artist-token-factory) — Artist token creation and registration
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/DraftTracks/drafttracks-v3-core.git
+cd drafttracks-v3-core
+npm install
+````
+
+### 2. Compile Contracts
+
+```bash
+npm run compile
 ```
 
-This will ensure that you are testing against the same bytecode that is deployed to
-mainnet and public testnets, and all Uniswap code will correctly interoperate with
-your local deployment.
+✅ This repo is usually deployed alongside [`drafttracks-v3-periphery`](https://github.com/DraftTracks/drafttracks-v3-periphery).
 
-## Using solidity interfaces
+---
 
-The Uniswap v3 interfaces are available for import into solidity smart contracts
-via the npm artifact `@uniswap/v3-core`, e.g.:
+## 🛠 Deployment Guide (Polygon / Base)
 
-```solidity
-import '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+1. Deploy core contracts from this repo:
 
-contract MyContract {
-  IUniswapV3Pool pool;
+   * `UniswapV3Factory`
+   * `UniswapV3PoolDeployer`
 
-  function doSomethingWithPool() {
-    // pool.swap(...);
-  }
-}
+2. Deploy periphery contracts:
 
-```
+   * `SwapRouter`
+   * `NonfungiblePositionManager`
 
-## Licensing
+3. Deploy \$TRACK and artist tokens
 
-The primary license for Uniswap V3 Core is the Business Source License 1.1 (`BUSL-1.1`), see [`LICENSE`](./LICENSE). However, some files are dual licensed under `GPL-2.0-or-later`:
+4. Create liquidity pools:
+   e.g. `$TRACK / $GABBY`, `$TRACK / $NEOT`, `$TRACK / $ROXY`
 
-- All files in `contracts/interfaces/` may also be licensed under `GPL-2.0-or-later` (as indicated in their SPDX headers), see [`contracts/interfaces/LICENSE`](./contracts/interfaces/LICENSE)
-- Several files in `contracts/libraries/` may also be licensed under `GPL-2.0-or-later` (as indicated in their SPDX headers), see [`contracts/libraries/LICENSE`](contracts/libraries/LICENSE)
+5. Manage trading, staking, and LPs through your mobile app or custom frontend
 
-### Other Exceptions
+---
 
-- `contracts/libraries/FullMath.sol` is licensed under `MIT` (as indicated in its SPDX header), see [`contracts/libraries/LICENSE_MIT`](contracts/libraries/LICENSE_MIT)
-- All files in `contracts/test` remain unlicensed (as indicated in their SPDX headers).
+## 🎯 DraftTracks Use Cases
+
+* 🎧 Trade \$TRACK ↔ artist tokens
+* 🛠 LP with unique artist-based fee tiers
+* 🖼 Use LP NFTs to track performance or award fan badges
+* 🧠 Future support for AI-driven agents, tokenized performance boosts, and reward hooks
+
+---
+
+## 🔐 License
+
+This project is a fork of [Uniswap v3-core](https://github.com/Uniswap/v3-core), licensed under the **Business Source License 1.1 (BSL-1.1)**.
+
+> Use is non-commercial until **April 1, 2025**. After that, BSL converts to a permissive GPL license.
+
+---
+
+## 📣 Contact
+
+Built and maintained by the DraftTracks protocol team.
+Explore the future of tokenized music careers and fan-powered artist ecosystems.
+
+* 💼 Jason Amos – `jay@drafttracks.com`
+* 🌐 [https://drafttracks.com](https://drafttracks.com)
